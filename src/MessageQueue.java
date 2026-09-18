@@ -1,3 +1,5 @@
+import java.util.Optional;
+
 public class MessageQueue {
     private Message[] messages;
     private int head;
@@ -16,5 +18,13 @@ public class MessageQueue {
         messages[head] = m;
         head = (head + 1) % messages.length;
         return true;
+    }
+    protected Optional<Message> getMessage(){
+        if(head == tail){
+            return Optional.empty();
+        }
+        Message m = messages[tail];
+        tail = (tail + 1) % messages.length;
+        return Optional.of(m);
     }
 }
