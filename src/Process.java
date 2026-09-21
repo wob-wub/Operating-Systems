@@ -1,7 +1,7 @@
 import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
-public class Process implements Runnable{
+public abstract class Process implements Runnable{
   Semaphore inbox_Full;
   Semaphore outbox_Full;
   Thread thread;
@@ -20,7 +20,7 @@ public class Process implements Runnable{
 
   }
   protected void sendMessage(Message m){
-      while(outbox.writeMessage(m) == false){
+      while(!outbox.writeMessage(m)){
          try{
              outbox_Full.acquire();
          } catch (InterruptedException e) {

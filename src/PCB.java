@@ -3,7 +3,7 @@ import java.util.LinkedList;
 public class PCB {
     Process process;
     int pid;
-    static int nextPid;
+    static int nextPid = 0;
     LinkedList<Message> buffer;
 
     PCB(Process process){

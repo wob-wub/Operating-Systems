@@ -10,6 +10,11 @@ public class MessageExchange extends Process{
 
 
     public void run(){
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         while(true){
             for(int run = 0; run < array.length; run++){
                 if(array[run] != null){
@@ -27,6 +32,7 @@ public class MessageExchange extends Process{
                                 else{
                                     array[target].process.inbox_Full.release();
                                 }
+                                break;
                             }
                         }
                     }
