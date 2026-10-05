@@ -1,4 +1,6 @@
 public enum KernelMessageType {
    createProcess,
-   locate
+   locate,
+   reschedule,
+   exit
 }

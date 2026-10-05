@@ -16,8 +16,6 @@ public abstract class Process implements Runnable{
       inbox = new MessageQueue();
       outbox = new MessageQueue();
       thread = new Thread(this);
-      thread.start();
-
   }
   protected void sendMessage(Message m){
       while(!outbox.writeMessage(m)){
@@ -40,4 +38,8 @@ public abstract class Process implements Runnable{
       }
       return result.get();
   }
+  protected void start(){
+      this.thread.start();
+  }
+
 }
