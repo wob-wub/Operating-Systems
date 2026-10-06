@@ -1,6 +1,7 @@
 import java.util.Arrays;
 
 public class Message {
+    // Stores the information needed to send a message between processes.
     int senderPid;
     int targetPid;
     int what;
@@ -28,7 +29,7 @@ public class Message {
         this.data[0] = data;
         this.data[1] = data2;
     }
-
+    // Makes it easier to display all of the message information.
     @Override
     public String toString() {
         return "Message{" +

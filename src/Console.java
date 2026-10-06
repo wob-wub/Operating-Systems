@@ -4,13 +4,15 @@ public class Console extends UserProcess{
     }
     @Override
     public void run() {
+        // Wait until Kernel schedules Console for the first time.
         try {
             semaphore.acquire();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        while(true){
-           Message m = getMessage();
+        // Keep receiving messages, printing them, and cooperating with Kernel.
+        while (true) {
+            Message m = getMessage();
             System.out.println(m.data[0]);
             cooperate();
         }

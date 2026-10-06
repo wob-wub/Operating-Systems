@@ -14,6 +14,7 @@ public class MessageExchange extends Process{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        // Continuously check each process for messages that need to be delivered.
         while(true){
             for(int run = 0; run < array.length; run++){
                 if(array[run] != null){
@@ -49,6 +50,7 @@ public class MessageExchange extends Process{
                         // Deliver the message to the correct process.
                         deliverMessage(m);
                     }
+                    // Retry messages that were saved because the process inbox was full.
                     if(!array[run].buffer.isEmpty()){
                         Message bufferedMessage = array[run].buffer.peek();
                         boolean delivered = array[run].process.inbox.writeMessage(bufferedMessage);

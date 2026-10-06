@@ -2,10 +2,12 @@ import java.util.Optional;
 import java.util.concurrent.*;
 
 public abstract class UserProcess extends Process {
+    // Used by Kernel to stop and resume this process.
     Semaphore semaphore;
+    // Backup message for Kernel when the normal outbox is full.
     volatile Message forKernel;
+    // Keeps track of whether this process has used its time limit.
     volatile boolean timeUp = false;
-
     ScheduledExecutorService timer;
     // Keeps track of the timer so we can cancel the old one before starting another.
     ScheduledFuture<?> timerTask;

@@ -28,9 +28,11 @@ public class Kernel extends Process {
 
     @Override
     public void run() {
+        // Start the first user process before Kernel begins handling messages.
         scheduleNext();
         while(true){
             Message m = getMessage();
+            // Create a new process, give it a PCB, and place it in an open spot.
             if(m.what == KernelMessageType.createProcess.ordinal()){
                 Process newProcess = (Process) m.data[0];
                 PCB newPCB = new PCB(newProcess);
@@ -42,6 +44,7 @@ public class Kernel extends Process {
                     }
                 }
             }
+            // Find a process by name and send its PID back to the process that asked.
             else if(m.what == KernelMessageType.locate.ordinal()){
                 String nameProcess = m.data[0].toString();
                 for(int run = 0; run < array.length ; run++){
@@ -54,6 +57,7 @@ public class Kernel extends Process {
                     }
                 }
             }
+            // Update the process state based on why it stopped, then choose the next process.
             else if(m.what == KernelMessageType.reschedule.ordinal()){
                 ProcessState reason = (ProcessState) m.data[0];
                 for(int run = 0; run < array.length; run++){
@@ -61,6 +65,7 @@ public class Kernel extends Process {
                         if(reason == ProcessState.QuantumExpired){
                             array[run].state = ProcessState.Runnable;
                         }
+                        // Check the queue again in case it changed before Kernel handled the request.
                         else if(reason == ProcessState.InboxEmpty){
                             if(array[run].process.inbox.isEmpty()){
                                 array[run].state = ProcessState.InboxEmpty;
@@ -84,6 +89,7 @@ public class Kernel extends Process {
 
                 scheduleNext();
             }
+            // Remove a finished process from the PCB array and schedule another process.
             else if (m.what == KernelMessageType.exit.ordinal()) {
                 for(int run = 0; run < array.length;run++){
                     if(array[run] != null && array[run].pid == m.senderPid){

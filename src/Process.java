@@ -2,12 +2,13 @@ import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
 public abstract class Process implements Runnable{
-  Semaphore inbox_Full;
-  Semaphore outbox_Full;
-  Thread thread;
-  String name;
-  MessageQueue inbox;
-  MessageQueue outbox;
+    // Basic information each process needs for messaging and running its thread.
+    Semaphore inbox_Full;
+    Semaphore outbox_Full;
+    Thread thread;
+    String name;
+    MessageQueue inbox;
+    MessageQueue outbox;
 
   Process(String name){
       this.name = name;
@@ -17,7 +18,8 @@ public abstract class Process implements Runnable{
       outbox = new MessageQueue();
       thread = new Thread(this);
   }
-  protected void sendMessage(Message m){
+    // Adds a message to the outbox and waits if there is no space.
+    protected void sendMessage(Message m){
       while(!outbox.writeMessage(m)){
          try{
              outbox_Full.acquire();
@@ -26,7 +28,8 @@ public abstract class Process implements Runnable{
          }
       }
   }
-  protected Message getMessage(){
+    // Gets the next inbox message and waits if the inbox is empty.
+    protected Message getMessage(){
       Optional<Message>result = inbox.getMessage();
       while(result.isEmpty()){
           try {
@@ -38,7 +41,8 @@ public abstract class Process implements Runnable{
       }
       return result.get();
   }
-  protected void start(){
+    // Starts the process thread when the system is ready.
+    protected void start(){
       this.thread.start();
   }
 
