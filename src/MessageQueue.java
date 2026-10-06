@@ -27,4 +27,11 @@ public class MessageQueue {
         tail = (tail + 1) % messages.length;
         return Optional.of(m);
     }
+    protected boolean isEmpty(){
+        return head == tail;
+    }
+    protected boolean isFull(){
+        return (head + 1) % messages.length == tail;
+    }
+
 }

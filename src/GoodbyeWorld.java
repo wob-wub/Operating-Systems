@@ -15,7 +15,6 @@ public class GoodbyeWorld extends UserProcess{
         sendMessage(message);
         message = getMessage();
         int consolePid = (Integer) message.data[0];
-        System.out.println("Goodbye World Locates Console, pid: " + consolePid);
         for(int run = 1; run <= 99; run++){
             Message paste = new Message(consolePid,0, "Goodbye World " + run);
             sendMessage(paste);

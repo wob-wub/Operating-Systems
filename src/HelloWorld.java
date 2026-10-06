@@ -14,7 +14,6 @@ public class HelloWorld extends UserProcess{
         sendMessage(message);
         message = getMessage();
         int consolePid = (Integer) message.data[0];
-        System.out.println("Hello World Locates Console, pid: " + consolePid);
         for(int run = 1; run <= 99; run++){
             Message paste = new Message(consolePid,0, "Hello World " + run);
             sendMessage(paste);

@@ -10,12 +10,9 @@ public class Init extends UserProcess {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Init Started");
         Console console = new Console();
         Message message = new Message(0,KernelMessageType.createProcess.ordinal(),console);
         sendMessage(message);
-
-        System.out.println("Beep");
 
         HelloWorld helloWorld = new HelloWorld();
         Message hWorld = new Message(0,KernelMessageType.createProcess.ordinal(),helloWorld);

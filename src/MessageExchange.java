@@ -34,7 +34,6 @@ public class MessageExchange extends Process{
                     }
                     Optional<Message> result = array[run].process.outbox.getMessage();
                     if(result.isPresent()){
-                        System.out.println("Message exchange found");
                         Message m = result.get();
 
                         // Let the process know that space was freed in its outbox.
@@ -44,7 +43,6 @@ public class MessageExchange extends Process{
                         if (array[run].state == ProcessState.OutboxFull) {
                             array[run].state = ProcessState.Runnable;
                         }
-
                         // Set the sender PID before delivering the message.
                         m.senderPid = array[run].pid;
 

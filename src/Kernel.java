@@ -31,7 +31,6 @@ public class Kernel extends Process {
         scheduleNext();
         while(true){
             Message m = getMessage();
-            System.out.println("Kernal recieved message");
             if(m.what == KernelMessageType.createProcess.ordinal()){
                 Process newProcess = (Process) m.data[0];
                 PCB newPCB = new PCB(newProcess);
@@ -56,19 +55,34 @@ public class Kernel extends Process {
                 }
             }
             else if(m.what == KernelMessageType.reschedule.ordinal()){
-               ProcessState reason = (ProcessState) m.data[0];
-               for(int run = 0; run < array.length; run++){
-                   if(array[run] != null && array[run].pid == m.senderPid){
-                      if(reason == ProcessState.QuantumExpired){
-                          array[run].state = ProcessState.Runnable;
-                      }
-                      else {
-                         array[run].state = reason;
-                      }
-                       break;
-                   }
-               }
-               scheduleNext();
+                ProcessState reason = (ProcessState) m.data[0];
+                for(int run = 0; run < array.length; run++){
+                    if(array[run] != null && array[run].pid == m.senderPid){
+                        if(reason == ProcessState.QuantumExpired){
+                            array[run].state = ProcessState.Runnable;
+                        }
+                        else if(reason == ProcessState.InboxEmpty){
+                            if(array[run].process.inbox.isEmpty()){
+                                array[run].state = ProcessState.InboxEmpty;
+                            }
+                            else{
+                                array[run].state = ProcessState.Runnable;
+                            }
+                        }
+                        else if(reason == ProcessState.OutboxFull){
+                            if(array[run].process.outbox.isFull()){
+                                array[run].state = ProcessState.OutboxFull;
+                            }
+                            else{
+                                array[run].state = ProcessState.Runnable;
+                            }
+                        }
+
+                        break;
+                    }
+                }
+
+                scheduleNext();
             }
             else if (m.what == KernelMessageType.exit.ordinal()) {
                 for(int run = 0; run < array.length;run++){

@@ -66,6 +66,7 @@ public abstract class UserProcess extends Process {
             // Store the request here since the normal outbox is already full.
             forKernel = request;
 
+
             // Wait until Kernel allows this process to continue.
             try {
                 semaphore.acquire();
